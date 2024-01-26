@@ -9,7 +9,8 @@
 
 1. *Клонировать репозиторий:*
    ```bash
-   git clone https://github.com/ArtemSermyagin/СЮДА_РЕПОЗИТОРИЙ
+   git clone https://github.com/ArtemSermyagin/cource_work_hh.git
+
 2. *Установить необходимые зависимости:*
    ```bash
    pip install -r requirements.txt
