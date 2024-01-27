@@ -7,5 +7,3 @@ database = "hh"
 user = "postgres"
 password = "enoagnzc"
 
-
-print("ghb aodih oa".replace(" ", ''))

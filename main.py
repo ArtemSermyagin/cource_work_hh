@@ -2,7 +2,6 @@ import psycopg2
 import requests
 
 from psycopg2.extensions import cursor as db_cursor
-from psycopg2.errors import UniqueViolation
 
 from src.manager import DBManager
 from src.const import employers_id, host, database, user, password
@@ -12,7 +11,7 @@ def insert_query(cur: db_cursor, table_name: str, fields: list[str], values: tup
     try:
         query = f"INSERT INTO {table_name} ({', '.join(fields)}) VALUES ({', '.join(['%s' for _ in fields])})"
         cur.execute(query, values)
-    except UniqueViolation as e:
+    except psycopg2.errors.UniqueViolation as e:
         ...
     finally:
         cur.connection.commit()
