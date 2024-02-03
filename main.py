@@ -2,19 +2,37 @@ import psycopg2
 import requests
 
 from psycopg2.extensions import cursor as db_cursor
+from psycopg2.errors import UniqueViolation, DuplicateTable
 
 from src.manager import DBManager
-from src.const import employers_id, host, database, user, password
+from src.const import employers_id, host, database, user, password, create_tables
 
 
 def insert_query(cur: db_cursor, table_name: str, fields: list[str], values: tuple):
     try:
         query = f"INSERT INTO {table_name} ({', '.join(fields)}) VALUES ({', '.join(['%s' for _ in fields])})"
         cur.execute(query, values)
-    except psycopg2.errors.UniqueViolation as e:
+    except UniqueViolation as e:
         ...
     finally:
         cur.connection.commit()
+
+
+def create_table():
+    with psycopg2.connect(
+            host=host,
+            database=database,
+            user=user,
+            password=password
+    ) as conn:
+        with conn.cursor() as cursor:
+            for create_table_query in create_tables:
+                try:
+                    cursor.execute(create_table_query)
+                except DuplicateTable as e:
+                    ...
+                finally:
+                    cursor.connection.commit()
 
 
 def insert_data():
@@ -57,6 +75,7 @@ functions = {
 index = -1
 
 if __name__ == "__main__":
+    create_table()
     insert_data()
     while True:
         for key, value in functions.items():
